@@ -1,0 +1,35 @@
+[book]
+authors = ["IceRabbit"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Rain all day, Code all night"
+
+[output.html]
+theme = "theme"
+additional-js = ["adds/tags.js"]
+additional-css = ["adds/tags.css"]
+site-url = "/"
+
+
+[output.html.print]
+enable = false
+
+[preprocessor.tagger]
+marker = "tags"
+split = ","
+tag2posts_path = "tag2posts.json"
+post2tags_path = "post2tags.json"
+
+[preprocessor.collector]
+input_type = "json"
+marker = "collect"
+save_path = "collect.json"
+add_title = true
+
+[preprocessor.tocjs]
+save_dir = "lib"
+theme_dir = "theme"
+block_marker_id = "tock"
+wing_marker_id = "tocw"
+base_url = "/"

@@ -1,0 +1,4 @@
+book
+*.json
+.idea
+src/lib
