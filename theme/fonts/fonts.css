@@ -1,0 +1,15 @@
+@font-face {
+    font-family: 'Monaco';
+    src: url('MonacoB2-Bold.otf') format('opentype');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'Monaco';
+    src: url('Monaco.ttf') format('truetype');
+    font-weight: normal;
+}
+
+body {
+    font-family: 'Monaco', sans-serif;
+}

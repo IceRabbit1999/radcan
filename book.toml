@@ -7,9 +7,13 @@ title = "Rain all day, Code all night"
 
 [output.html]
 theme = "theme"
+default-theme = "mocha"
 additional-js = ["adds/tags.js"]
-additional-css = ["adds/tags.css"]
+additional-css = ["adds/tags.css", "./theme/catppuccin.css", "./theme/catppuccin-admonish.css"]
+no-section-label = true
 site-url = "/"
+git-repository-url = "https://github.com/IceRabbit1999/radcan"
+git-repository-icon = "fa-github"
 
 
 [output.html.print]
@@ -33,3 +37,6 @@ theme_dir = "theme"
 block_marker_id = "tock"
 wing_marker_id = "tocw"
 base_url = "/"
+
+[preprocessor.catppuccin]
+assets_version = "2.1.0" # DO NOT EDIT: Managed by `mdbook-catppuccin install`
