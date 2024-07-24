@@ -7,11 +7,11 @@ on:
       - main  
     
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Setup Rust
       uses: actions-rs/toolchain@v1
@@ -19,20 +19,44 @@ jobs:
         profile: minimal
         toolchain: stable
         override: true
+        
+    - name: cache
+    - uses: actions/cache@v3
+      with:
+        path: |
+          ~/.cargo/bin/mdbook
+          ~/.cargo/bin/mdbook-collector
+          ~/.cargo/bin/mdbook-tagger
+          ~/.cargo/bin/mdbook-tocjs
+          ~/.cargo/bin/mdbook-catppuccin
+        key: ${{ runner.os }}-mdbook-${{ hashFiles('**/Cargo.lock') }}
 
     - name: Install mdBook
-      run: cargo install mdbook
-
-    - name: Install mdBook preprocessors
       run: |
-        cargo install mdbook-collector
-        cargo install mdbook-tagger
-        cargo install mdbook-tocjs
-        cargo install mdbook-catppuccin
+        cargo install mdbook || true
+        cargo install mdbook-collector || true
+        cargo install mdbook-tagger || true
+        cargo install mdbook-tocjs || true
+        cargo install mdbook-catppuccin || true
+      if: steps.cache.outputs.cache-hit != 'true'
+     
+    - name: init theme
+      run: |
         mdbook-catppuccin install
 
     - name: Build mdBook
       run: mdbook build
+
+  deploy:
+    permissions:
+      pages: write
+      id-token: write
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{steps.deployment.outputs.page_url}}
+    steps:
 
     - name: Setup Pages
       uses: actions/configure-pages@v4
@@ -41,7 +65,7 @@ jobs:
       with:
     # Upload entire repository
         path: 'book'
-        
+      
     - name: Deploy to GitHub Pages
       id: deployment
       uses: actions/deploy-pages@v4
