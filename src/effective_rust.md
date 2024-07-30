@@ -73,3 +73,37 @@ pub fn find_user(username: &str) -> Result<UserId, std::io::Error> {
   - access to operating system resources
   - access to synchronization resources
   - access to raw memory
+- `trait Shape: Draw` is better expressed as `Shape` also-implements `Draw`, instead of `Shape` is-a `Draw`
+- Trait object safety:
+  - trait's methods must NOT be generic
+  - trait's methods must not involve type that includes `Self`, except for the receiver
+- A degree of tension in the trait design:
+  - To the implementors: it's better for a trait to have the absolute minimum number of methods to achieve its purpose
+  - To user: it's helpful to provide a range of variant methods that cover all of the common ways that the trait might be used
+  - This tension can be balanced by including the wider range of methods, but with default implementations provided
+
+# Concepts
+
+- When there are two lifetimes `'a` that are the 'same', that just means that the output lifetime has to be contained within the life times of both of the inputs
+```rust
+pub fn smaller<'a>(left: &'a Item, right: &'a Item) -> &'a Item {
+    // ...
+}
+```
+Put it another way, the output lifetime has to be subsumed within the smaller of the lifetimes of the two inputs
+```rust
+{
+    let outer = Item { contents: 7 };
+    {
+        let inner = Item { contents: 8 };
+        {
+            let min = smaller(&inner, &outer);
+            println!("smaller of {inner:?} and {outer:?} is {min:?}");
+        } // `min` dropped
+    } // `inner` dropped
+} // `outer` dropped
+```
+
+- Prefer data structures that own their contents where possible
+- Use smart pointers for interconnected data structures
+- Avoid self-referential data structures
