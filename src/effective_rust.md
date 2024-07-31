@@ -107,3 +107,26 @@ Put it another way, the output lifetime has to be subsumed within the smaller of
 - Prefer data structures that own their contents where possible
 - Use smart pointers for interconnected data structures
 - Avoid self-referential data structures
+- Consider writing a wrapper layer that holds all the `unsafe` code
+- If shared-state concurrency can't be avoided(Share memory by communicating), then there are some ways to reduce the chances of writing deadlock-prone code:
+  - Put data structures that must be kept consistent with each other under a single lock
+  ```rust
+  struct GameState {
+    players: HashMap<String, Player>,
+    games: HashMap<GameId, Game>,
+  }
+
+  struct GameServer {
+    state: Mutex<GameState>,
+  // ...
+  }
+   ```
+  - Keep lock scopes small and obvious, whenever possible, use helper methods that get and set things under the relevant lock
+  - Avoid invoking closures with locks held
+  - Avoid returning a `MutexGuard` to a caller
+  - Include deadlock detection tools in CI
+- Prefer returning a `Result` to using `panic!`
+- Avoid reflection, Prefer traits to reflection
+- It's makes more sense to focus on usability first and fine-tune for optimal efficiency only if performance is genuinely a concern
+
+# Dependencies
