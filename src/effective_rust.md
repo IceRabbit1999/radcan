@@ -130,3 +130,7 @@ Put it another way, the output lifetime has to be subsumed within the smaller of
 - It's makes more sense to focus on usability first and fine-tune for optimal efficiency only if performance is genuinely a concern
 
 # Dependencies
+- Re-export dependencies whose types appear in your API
+
+# Tooling
+- Do not describe how some other code uses a method
